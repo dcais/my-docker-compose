@@ -1,0 +1,6 @@
+web:
+  image: nginx:1.14
+  volumes:
+  - ./nginx.conf:/etc/nginx/nginx.conf:ro
+  ports:
+  - "80:80"
