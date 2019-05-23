@@ -1,0 +1,16 @@
+version: '3'
+services:
+  mysql:
+    image: mysql:8.0.16
+    restart: always
+    environment: 
+      MYSQL_ROOT_PASSWORD: workhome
+    volumes:
+    #- ./my.cnf:/etc/mysql/conf.d/my.cnf
+    - my-datavolume:/var/lib/mysql 
+    # - ./Shanghai:/etc/localtime:ro
+    ports:
+    - 3306:3306
+    privileged: true
+volumes:
+  my-datavolume:
