@@ -1,0 +1,21 @@
+version: '3'
+services:
+  fluentd-agent:
+    image: registry.cn-hangzhou.aliyuncs.com/sqmall/fluentd:1.5
+    # image: gcr.azk8s.cn/fluentd-elasticsearch/fluentd:v2.5.2
+    # image: fluentd:v0.0.2
+    # entrypoint: 
+      # - /bin/bash
+      # - -c
+    # command: ["chown -R fluent:fluent /var/target/ && tini -- /bin/entrypoint.sh fluentd"]
+    restart: always
+    environment: 
+      AGENT_HOST: fluent_1
+    volumes:
+    - ./fluent.conf:/fluentd/etc/fluent.conf
+    # - ./fluent.conf:/etc/fluent/config.d/fluent.conf
+    - /Users/david/flora_run/logs:/var/target/fauna:rw
+    - ./Shanghai:/etc/localtime:ro
+    ports:
+    - 9980:9980
+# privileged: true
