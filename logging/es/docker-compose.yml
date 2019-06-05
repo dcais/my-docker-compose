@@ -1,0 +1,37 @@
+version: '3.7'
+services:
+  sq-log-es:
+    image: registry.cn-hangzhou.aliyuncs.com/sqmall/elasticsearch:oss-6.8.0
+    # deploy:
+      # resources:
+        # limits:
+          # cpus: '2.00'
+          # memory: 50M
+        # reservations:
+          # cpus: '1.00'
+          # memory: 20M
+    environment:
+      - node.name=sq-log-es-001
+      - cluster.name=sq-log-es
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+      - "discovery.zen.ping.unicast.hosts=sq-log-es"
+      - network.host=0.0.0.0
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    container_name: sq-log-es
+    ports:
+      - "9200:9200"
+      # - "9300:9300"
+    volumes:
+      - sq-log-es-datavolume:/usr/share/elasticsearch/data
+    networks:
+      - es_net
+volumes:
+  sq-log-es-datavolume:
+
+networks:
+  es_net:
+    external: true

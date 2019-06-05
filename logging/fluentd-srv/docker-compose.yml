@@ -1,7 +1,7 @@
 version: '3'
 services:
-  fluentd-agent:
-    image: registry.cn-hangzhou.aliyuncs.com/sqmall/fluentd:r1.5.1
+  fluentd-srv:
+    image: registry.cn-hangzhou.aliyuncs.com/sqmall/fluentd:r1.5
     # image: gcr.azk8s.cn/fluentd-elasticsearch/fluentd:v2.5.2
     # image: fluentd:v0.0.2
     # entrypoint: 
@@ -10,14 +10,22 @@ services:
     # command: ["chown -R fluent:fluent /var/target/ && tini -- /bin/entrypoint.sh fluentd"]
     restart: always
     environment: 
-      AGENT_HOST: fluent_1
-      FORWARD_HOST: 10.88.0.56
-      FORWARD_PORT: 24224
+      ES_HOST: sq-log-es
+      ES_PORT: 9200
     volumes:
     - ./fluent.conf:/fluentd/etc/fluent.conf
+    - fluentd-srv-buffer:/fluentd/buffers:rw
     # - ./fluent.conf:/etc/fluent/config.d/fluent.conf
-    - /Users/david/flora_run/logs:/var/target/fauna:rw
+    # - /Users/david/flora_run/logs:/var/target/fauna:rw
     - ./Shanghai:/etc/localtime:ro
     ports:
-    - 9980:9980
+    - 24224:24224
+    networks:
+    - es_net
 # privileged: true
+volumes:
+  fluentd-srv-buffer:
+networks:
+  es_net:
+    external: true
+  
