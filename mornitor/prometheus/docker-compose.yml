@@ -1,0 +1,11 @@
+version: '3'
+services:
+  prometheus:
+    image: prom/prometheus:v2.10.0 
+    volumes: 
+    - prom_tsdb:/prometheus
+    ports: 
+    - 9090:9090
+
+volumes: 
+  prom_tsdb:

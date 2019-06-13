@@ -8,8 +8,8 @@ services:
       CLUSTER_NAME: my-es-cluster
     container_name: es 
     ports:
-      - "9200:9200"
-      - "9300:9300"
+      - "4592:9200"
+      - "4593:9300"
     volumes:
       - es-datavolume:/usr/share/elasticsearch/data
 volumes:
