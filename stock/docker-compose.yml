@@ -1,0 +1,16 @@
+version: '3'
+services:
+  my-config-server:
+    image: dockersai/stock:v0.0.1
+    environment: 
+      CONFIG_LOCATION: "file:/bootstrap.yml,file:/application.yml"
+    volumes:
+    - ./bootstrap.yml:/bootstrap.yml:ro
+    - ./application.yml:/application.yml:ro
+    ports:
+    - 8000:8000
+    networks: 
+      -mysql_db_net
+networks: 
+  mysql_db_net:
+    external: true

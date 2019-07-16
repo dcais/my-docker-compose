@@ -6,11 +6,16 @@ services:
     environment: 
       MYSQL_ROOT_PASSWORD: workhome
     volumes:
-    #- ./my.cnf:/etc/mysql/conf.d/my.cnf
+    - ./my.cnf:/etc/mysql/conf.d/my.cnf
     - my-datavolume:/var/lib/mysql 
     - ./Shanghai:/etc/localtime:ro
     ports:
     - 3306:3306
     privileged: true
+    networks:
+      - mysql_db_net
 volumes:
   my-datavolume:
+networks: 
+  mysql_db_net:
+    external: true

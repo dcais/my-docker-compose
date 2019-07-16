@@ -1,0 +1,12 @@
+version: '3'
+services:
+  my-config-server:
+    image: config-server:test
+    environment: 
+      CONFIG_LOCATION: "file:/bootstrap.yml,file:/application.yml"
+    volumes:
+    - ./bootstrap.yml:/bootstrap.yml
+    - ./application.yml:/application.yml
+    - ./.ssh:/root/.ssh
+    ports:
+    - 8888:8888

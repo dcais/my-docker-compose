@@ -1,0 +1,40 @@
+server:
+  port: 8000
+  servlet:
+    context-path: /stock
+
+spring:
+  datasource:
+    url: jdbc:mysql://mysql-net:3306/stock?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&allowMultiQueries=true&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true&useSSL=false
+    username: stock
+    password: aRmbZH9dx9k6TzRB
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jackson:
+    date-format: yyyy-MM-dd'T'HH:mm:ss.SSSZZ
+    time-zone: GMT+8
+
+stock:
+  proxy:
+    ip: 127.0.0.1:8080
+    use-proxy: false
+    exclude-url: 123
+
+tushare:
+  url: http://api.tushare.pro
+  token: #
+
+mybatis:
+  mapper-locations: 'classpath:/mapper/**/*.xml'
+
+#logging:
+#  level:
+#    root: DEBUG
+#    org.dcais.stock: DEBUG
+#    org:
+#      springframework:
+#        web: DEBUG
+#    com.ibatis: WARN
+#    java.sql: DEBUG
+#    java.sql.ResultSet: DEBUG
+
+

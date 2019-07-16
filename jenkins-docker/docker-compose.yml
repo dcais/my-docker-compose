@@ -3,10 +3,13 @@ services:
   jenkins-docker:
     image: h1kkan/jenkins-docker:2.164.3-alpine
     restart: always
+    environment:
+      JAVA_OPTS: -Duser.timezone=Asia/Shanghai
     volumes:
     #- ./my.cnf:/etc/mysql/conf.d/my.cnf
     - jenkins-home:/var/jenkins_home
-    - ./Shanghai:/etc/localtime:ro
+    - /var/run/docker.sock:/var/run/docker.sock
+    # - ./Shanghai:/etc/localtime:ro
     ports:
     - 7070:8080
     - 5000:5000

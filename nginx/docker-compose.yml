@@ -1,8 +1,20 @@
 version: '3'
 services:
   nginx:
+    environment: 
+      L_TRANS_HOST: 10.88.0.56
+      L_FAUNA_PORT: 8080
+      L_MOCK_PORT: 3888
+      TEST_HOST: 47.99.184.154
+      TEST_FAUNA_PORT: 5580
+
     image: nginx:1.14
     volumes:
-    - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    - ./nginx.conf.template:/nginx.conf.template:ro
+    # - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    - ./run_nginx.sh:/run_nginx.sh:ro
+    - /Users/david/git/yuanpin/launa-site:/launa-site:ro
     ports:
     - 80:80
+    # command: /bin/bash -c "envsubst < /nginx.conf.template > /etc/nginx/nginx.conf && exec nginx -g 'daemon off;'"
+    command: /run_nginx.sh
