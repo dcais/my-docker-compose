@@ -1,0 +1,4 @@
+.ssh
+.history
+config-server/application.yml
+config-server/bootstrap.yml

@@ -1,0 +1,229 @@
+
+#user  nobody;
+worker_processes  1; #error_log  logs/error.log;
+#error_log  logs/error.log  notice;
+#error_log  logs/error.log  info;
+
+#pid        logs/nginx.pid;
+
+events {
+    worker_connections  1024;
+}
+
+
+http {
+    include       mime.types;
+    default_type  application/octet-stream;
+
+    #log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+    #                  '$status $body_bytes_sent "$http_referer" '
+    #                  '"$http_user_agent" "$http_x_forwarded_for"';
+
+    #access_log  logs/access.log  main;
+
+    sendfile        on;
+    #tcp_nopush     on;
+
+    #keepalive_timeout  0;
+    keepalive_timeout  65;
+
+    #gzip  on;
+
+    server {
+        listen 9898;
+        location / {
+            proxy_pass http://${DOLLAR}http_host${DOLLAR}request_uri;
+        }
+    }
+
+    server {
+        listen       80;
+        server_name  localhost;
+
+        #charset utf-8;
+        #charset gbk,utf-8;
+        proxy_set_header   Host             ${DOLLAR}host;
+        proxy_set_header   X-Real-IP        ${DOLLAR}remote_addr;
+        proxy_set_header   X-Forwarded-For  ${DOLLAR}proxy_add_x_forwarded_for;
+        #charset koi8-r;
+        gzip on; 
+#        gzip_proxied any;
+#        gzip_disable "msie6";
+#        gzip_vary on;
+#        gzip_min_length 1k; 
+#        gzip_buffers 4 16k;
+#        gzip_http_version 1.1;
+#        gzip_comp_level 5;
+        gzip_types text/css application/javascript application/json text/plain;
+
+
+        #access_log  logs/host.access.log  main;
+
+        location / {
+            root   html;
+            index  index.html index.htm;
+        }
+
+        #error_page  404              /404.html;
+
+        # redirect server error pages to the static page /50x.html
+        #
+        error_page   500 502 503 504  /50x.html;
+        location = /50x.html {
+            root   html;
+        }
+
+        location /launa-site/ {
+#            add_header Content-Type 'text/html; charset=utf-8';
+            alias  /launa-site/;
+            index  index.html index.htm;
+        }
+        location /w/ {
+#             if ( ${DOLLAR}http_user_agent ~* "sqmall" ){
+#                 rewrite ^/(.*)$ http://${L_TRANS_HOST}/fauna/w/$1 permanent;
+#             }
+             proxy_set_header X-Real-IP        ${DOLLAR}remote_addr;
+             proxy_set_header X-Real-Location /w/;
+             proxy_pass    http://${L_TRANS_HOST}:5380/w/;
+             proxy_redirect default ;
+        }
+        location /fauna/{
+             proxy_pass    http://${TEST_HOST}:${TEST_FAUNA_PORT}/fauna/;
+             proxy_redirect default ;
+        }
+
+#        location /fauna/mainPageSection/mainPageNavData{
+#             proxy_pass    http://${L_TRANS_HOST}:${L_MOCK_PORT}/fauna/mainPageSection/mainPageNavData;
+#             proxy_redirect default ;
+#        }
+# 
+#        location /fauna/app/hasRedbagRain{
+#             proxy_pass    http://${L_TRANS_HOST}:${L_MOCK_PORT}/fauna/app/hasRedbagRain;
+#             proxy_redirect default ;
+#        }
+#        location /w/dd/home/app/hasRedbagRain{
+#             proxy_pass    http://${L_TRANS_HOST}:${L_MOCK_PORT}/fauna/app/hasRedbagRain;
+#             proxy_redirect default ;
+#        }
+#
+#        location /fauna/redbag/takePrize/auth{
+#             proxy_pass    http://${L_TRANS_HOST}:${L_MOCK_PORT}/fauna/redbag/takePrize/auth;
+#             proxy_redirect default ;
+#        }
+#        location /fauna/rayMainPage/rayStoreBaseInfo {
+#             proxy_pass    http://${L_TRANS_HOST}:${L_MOCK_PORT}/fauna/rayMainPage/rayStoreBaseInfo;
+#             proxy_redirect default ;
+#        }
+#        location /fauna/rayBinding/userRayStoreList/auth {
+#             proxy_pass    http://${L_TRANS_HOST}:${L_MOCK_PORT}/fauna/rayBinding/userRayStoreList/auth;
+#             proxy_redirect default ;
+#        }
+#        location /w/dd/mine/userRayStoreList/auth {
+#             proxy_pass    http://${L_TRANS_HOST}:${L_MOCK_PORT}/fauna/rayBinding/userRayStoreList/auth;
+#             proxy_redirect default ;
+#        }
+#        location /fauna/app/hasNotification {
+#             proxy_pass    http://${L_TRANS_HOST}:${L_MOCK_PORT}/fauna/app/hasNotification;
+#             proxy_redirect default ;
+#        }
+#
+#        location /w/dd/home/hasNotification {
+#             proxy_pass    http://${L_TRANS_HOST}:${L_MOCK_PORT}/fauna/app/hasNotification;
+#             proxy_redirect default ;
+#        }
+#
+#        location /bauna/{
+#             proxy_pass    http://${L_TRANS_HOST}:8081/bauna/;
+#             proxy_redirect default ;
+#        }
+#
+        location /fauna/w/{
+             proxy_set_header X-Real-Location /fauna/w/;
+             proxy_pass    http://${L_TRANS_HOST}:5380/w/;
+             proxy_redirect default ;
+        }
+        
+      
+
+        location /ddadmin/ {
+            proxy_pass  http://${L_TRANS_HOST}:5480/ddadmin/;
+            proxy_redirect default ;
+        }
+
+        location /launa/web/ {
+             proxy_pass http://${L_TRANS_HOST}:8184/launa/web/;
+             proxy_redirect default ;
+        }
+        location /launa/ {
+             proxy_pass http://${L_TRANS_HOST}:8084/launa/;
+             proxy_redirect default ;
+        }
+        location /ll/ {
+             proxy_pass http://idea.lanyus.com/;
+             proxy_redirect default ;
+        }
+        location /sauna/ {
+             proxy_pass http://${L_TRANS_HOST}:8180/sauna/;
+             proxy_redirect default ;
+        }
+        # proxy the PHP scripts to Apache listening on ${L_TRANS_HOST}:80
+        #
+        #location ~ \.php$ {
+        #    proxy_pass   http://${L_TRANS_HOST};
+        #}
+
+        # pass the PHP scripts to FastCGI server listening on ${L_TRANS_HOST}:9000
+        #
+        #location ~ \.php$ {
+        #    root           html;
+        #    fastcgi_pass   ${L_TRANS_HOST}:9000;
+        #    fastcgi_index  index.php;
+        #    fastcgi_param  SCRIPT_FILENAME  /scripts${DOLLAR}fastcgi_script_name;
+        #    include        fastcgi_params;
+        #}
+
+        # deny access to .htaccess files, if Apache's document root
+        # concurs with nginx's one
+        #
+        #location ~ /\.ht {
+        #    deny  all;
+        #}
+    }
+
+
+    # another virtual host using mix of IP-, name-, and port-based configuration
+    #
+    #server {
+    #    listen       8000;
+    #    listen       somename:8080;
+    #    server_name  somename  alias  another.alias;
+
+    #    location / {
+    #        root   html;
+    #        index  index.html index.htm;
+    #    }
+    #}
+
+
+    # HTTPS server
+    #
+    #server {
+    #    listen       443 ssl;
+    #    server_name  localhost;
+
+    #    ssl_certificate      cert.pem;
+    #    ssl_certificate_key  cert.key;
+
+    #    ssl_session_cache    shared:SSL:1m;
+    #    ssl_session_timeout  5m;
+
+    #    ssl_ciphers  HIGH:!aNULL:!MD5;
+    #    ssl_prefer_server_ciphers  on;
+
+    #    location / {
+    #        root   html;
+    #        index  index.html index.htm;
+    #    }
+    #}
+    include servers/*;
+}

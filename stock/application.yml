@@ -5,7 +5,7 @@ server:
 
 spring:
   datasource:
-    url: jdbc:mysql://mysql-net:3306/stock?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&allowMultiQueries=true&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true&useSSL=false
+    url: jdbc:mysql://mysql:3306/stock?useUnicode=true&characterEncoding=utf-8&autoReconnect=true&allowMultiQueries=true&zeroDateTimeBehavior=convertToNull&rewriteBatchedStatements=true&useSSL=false
     username: stock
     password: aRmbZH9dx9k6TzRB
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -21,20 +21,15 @@ stock:
 
 tushare:
   url: http://api.tushare.pro
-  token: #
+  token: 36d50a0386e9066b5c79c2de58ea2d3a9b980020041adc910f76bfc7
 
 mybatis:
   mapper-locations: 'classpath:/mapper/**/*.xml'
 
-#logging:
-#  level:
-#    root: DEBUG
-#    org.dcais.stock: DEBUG
-#    org:
-#      springframework:
-#        web: DEBUG
-#    com.ibatis: WARN
-#    java.sql: DEBUG
-#    java.sql.ResultSet: DEBUG
+logging:
+  level:
+    org.dcais.stock: DEBUG
+    java.sql: DEBUG
+    java.sql.ResultSet: DEBUG
 
 
